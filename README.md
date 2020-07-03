@@ -2,9 +2,11 @@
 
 ## Installation
 
-Install php >= 7.2
-Install apahche2
-Install MySQL
+Prepare Environment
+
+- Install php >= 7.2
+- Install apahche2
+- Install MySQL
 
 Clone the Repo
 
