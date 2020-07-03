@@ -10,5 +10,5 @@ require_once "config.php";
 // $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 //============ production ===============
 $pg_dsn = "pgsql:host=" . $pg_host . ";port=" . $pg_port . ";dbname=" . $pg_db;
-$pg_db = new PDO($pg_dsn, $pg_user, $pg_password);
-$pg_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+$db = new PDO($pg_dsn, $pg_user, $pg_password);
+$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
