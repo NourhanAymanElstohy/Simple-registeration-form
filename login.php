@@ -13,29 +13,48 @@ if (isset($_POST['login'])) {
 
         //============ Email ==============
         if (strlen($_POST['email']) < 1) {
-            $errors['email'][] = "Email is required";
+            $_SESSION['email-error'] = "Email is required";
+            header("Location: login.php");
+            return;
+        } elseif (preg_match("/^[a-zA-z0-9]+@[a-z]+.[a-z]{2,4}$/", $_POST['email']) == false) {
+            $_SESSION['email-error'] = "Email is not valid";
+            header("Location: login.php");
+            return;
         } else {
             $email = $_POST['email'];
+            $_SESSION['email'] = $_POST["email"];
         }
         //========== password ===============
         if (strlen($_POST['password']) < 1) {
-            $errors['password'][] = "Password is required";
+            $_SESSION['pass-error'] = "Password is required";
+            header("Location: login.php");
+            return;
         } else {
             $password = $_POST['password'];
+            $_SESSION['password'] = $_POST['passworrd'];
             $salt = 'XyZzy12*_';
             $hashed_password = hash('md5', $salt . $password);
         }
         if ($email && $password) {
-            $sql = "select * from users where email=:email and password =:password";
+            $sql = "select * from users where email=:email";
 
             $stmt = $db->prepare($sql);
-            $stmt->execute(['email' => $email, 'password' => $hashed_password]);
+            $stmt->execute(['email' => $email]);
 
             if ($user = $stmt->fetch()) {
-                header("Location: index.php");
-                return;
+                if ($user["password"] != $hashed_password) {
+                    $_SESSION["pass-error"] = "Incorrect Password";
+                    header("Location: login.php");
+                    return;
+                } else {
+                    $_SESSION['name'] = $user["name"];
+                    header("Location: index.php");
+                    return;
+                }
             } else {
-                $errors['not_login'][] = "This user is not found, Please Create a new Account" . "<br>" . "<a href=\"register.php\">Create a new Account</a>";
+                $_SESSION['not-found'] = "This user is not found, Please Create a new Account" . "<br>" . "<a href=\"register.php\">Create a new Account</a>";
+                header("Location: login.php");
+                return;
             }
         }
     }
@@ -59,42 +78,45 @@ if (isset($_POST['login'])) {
                 <form method="POST">
                     <div class="form-row">
                         <div class="col-md-12 mb-3">
+                            <?php
+                            if (isset($_SESSION['success'])) {
+                                echo ('<p style="color: green;">' . htmlentities($_SESSION['success']) . "</p>\n");
+                                unset($_SESSION['success']);
+                            }
+                            ?>
                             <h1>Login to Your Account</h1>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="col-md-12 mb-3">
                             <label for="validationCustom02">Email</label>
-                            <input type="email" class="form-control" id="validationCustom02" value="<?= $_POST['email'] ?>" name="email">
-                            <p class="text-danger">
-                                <?php if (isset($errors['email'])) {
-                                    foreach ($errors['email'] as $val) {
-                                        echo "$val" . "<br>";
-                                    }
-                                } ?>
-                            </p>
+                            <input type="text" class="form-control" id="validationCustom02" value="<?= $_SESSION['email']  ?>" name="email">
+                            <?php
+                            if (isset($_SESSION['email-error'])) {
+                                echo ('<p style="color: red;">' . htmlentities($_SESSION['email-error']) . "</p>\n");
+                                unset($_SESSION['email-error']);
+                            }
+                            ?>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="col-md-12 mb-3">
                             <label for="validationCustom05">Password</label>
-                            <input type="password" class="form-control" id="validationCustom05" value="<?= $_POST['password'] ?>" name="password">
-                            <p class="text-danger">
-                                <?php if (isset($errors['password'])) {
-                                    foreach ($errors['password'] as $val) {
-                                        echo "$val" . "<br>";
-                                    }
-                                } ?>
-                            </p>
+                            <input type="password" class="form-control" id="validationCustom05" value="<?= $_SESSION['password'] ?>" name="password">
+                            <?php
+                            if (isset($_SESSION['pass-error'])) {
+                                echo ('<p style="color: red;">' . htmlentities($_SESSION['pass-error']) . "</p>\n");
+                                unset($_SESSION['pass-error']);
+                            }
+                            ?>
                         </div>
                     </div>
                     <button class="btn btn-primary" type="submit" name="login">Login</button>
                     <button class="btn btn-secondary" name="cancel">Cancel</button>
                     <?php
-                    if (isset($errors['not_login'])) {
-                        foreach ($errors['not_login'] as $val) {
-                            echo "<br>" . $val . "<br>";
-                        }
+                    if (isset($_SESSION['not-found'])) {
+                        echo ("<br>" . $_SESSION['not-found']);
+                        unset($_SESSION['not-found']);
                     }
                     ?>
                 </form>

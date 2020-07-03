@@ -61,9 +61,9 @@ if (isset($_POST['register'])) {
             $errors['password'][] = "Password must be between 8 and 10 characters";
         } else {
             $password = $_POST['password'];
+            $_SESSION['password']  = $_POST['password'];
             $salt = 'XyZzy12*_';
             $hashed_password = hash('md5', $salt . $password);
-            $_SESSION['password']  = $hashed_password;
         }
         //======= Register ==============
         if ($name && $email && $phone && $address && $password) {
@@ -77,6 +77,7 @@ if (isset($_POST['register'])) {
                 ':address' => $address,
                 ':password' => $hashed_password,
             ));
+            $_SESSION['success'] = "Thank you for your registeration";
             header("Location: login.php");
             return;
         }
@@ -121,7 +122,7 @@ if (isset($_POST['register'])) {
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="validationCustom02">Email</label>
-                            <input type="email" class="form-control" id="validationCustom02" value="<?= $_POST['email'] ?>" name="email">
+                            <input type="text" class="form-control" id="validationCustom02" value="<?= $_POST['email'] ?>" name="email">
                             <p class="text-danger">
                                 <?php if (isset($errors['email'])) {
                                     foreach ($errors['email'] as $val) {
@@ -134,7 +135,7 @@ if (isset($_POST['register'])) {
                     <div class="form-row">
                         <div class="col-md-6 mb-3">
                             <label for="validationCustom05">Phone</label>
-                            <input type="phone" class="form-control" id="validationCustom05" value="<?= $_POST['phone'] ?>" name="phone">
+                            <input type="text" class="form-control" id="validationCustom05" value="<?= $_POST['phone'] ?>" name="phone">
                             <p class="text-danger">
                                 <?php if (isset($errors['phone'])) {
                                     foreach ($errors['phone'] as $val) {

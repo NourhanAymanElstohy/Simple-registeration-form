@@ -19,12 +19,13 @@ session_start();
         </div>
         <div class="row justify-content-center">
             <?php
-            if (!isset($_SESSION["email"]) || !isset($_SESSION['login']) || !isset($_SESSION['register'])) { ?>
+            if (!isset($_SESSION['name'])) { ?>
+
                 <p>Please <a href="register.php" class="text-primary">Register</a> Or <a href="login.php">Log In</a> If you already have an account</p>
             <?php
             } else { ?>
-                <p class="text-success">Thank you for Your login</p>
-                <p><a href="logout.php">Log Out</a></p>
+                <p class="mr-2">Welcome <?= $_SESSION['name'] ?></p>
+                <p class="ml-3"><a href="logout.php">Log Out</a></p>
             <?php } ?>
         </div>
     </div>
