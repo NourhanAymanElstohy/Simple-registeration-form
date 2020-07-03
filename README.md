@@ -25,7 +25,7 @@ CREATE TABLE users (id INT NOT NULL AUTO_INCREMENT, name VARCHAR(50), email VARC
 Edit DATABASE Credential
 
 ```
-go to file conf.php and add your database credentials
+go to file conf.php and add your database credentials in development mode
 ```
 
 Run The application, On Browser
