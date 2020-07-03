@@ -9,7 +9,6 @@ if ($_SERVER["HTTP_HOST"] == "localhost") {
 } else {
     unset($_ENV['development']);
 }
-die($_SERVER["HTTP_HOST"]);
 //============ production ===============
 if (isset($_ENV['production'])) {
     $pg_dsn = "pgsql:host=" . $pg_host . ";port=" . $pg_port . ";dbname=" . $pg_db;
