@@ -19,7 +19,8 @@ In MySQL
 
 ```
 CREATE DATABASE webgen_task4;
-CREATE TABLE users (id INT NOT NULL AUTO_INCREMENT, name VARCHAR(50), email VARCHAR(50), phone VARCHAR(50), address VARCHAR(150), password VARCHAR(50));
+use webgen_task4;
+CREATE TABLE users (id INT NOT NULL AUTO_INCREMENT, name VARCHAR(50), email VARCHAR(50), phone VARCHAR(50), address VARCHAR(150), password VARCHAR(50), PRIMARY KEY (id));
 ```
 
 Edit DATABASE Credential
